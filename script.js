@@ -1,88 +1,72 @@
-// Pedimos el nombre de usuario al cargar la página
-let nombreUsuario = prompt("Por favor, ingresa tu nombre de usuario:");
-
-if (nombreUsuario === null || nombreUsuario.trim() === "") {
-    nombreUsuario = "Invitado";
-}
-
-document.getElementById('saludo').textContent = "Bienvenido, " + nombreUsuario;
-
 document.getElementById('btn-calcular').addEventListener('click', procesarSimulacion);
 
-const formatoMoneda = new Intl.NumberFormat('es-MX', {
-    style: 'currency',
-    currency: 'MXN',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-});
+// función que registra y valida el nombre del solicitante
+function registrarNombre() {
+  const nombre = document.getElementById('nombre').value.trim();
+  const errorMsg = document.getElementById('error-msg');
+
+  if (nombre === '') {
+    errorMsg.textContent = "Ingrese el nombre del solicitante para continuar.";
+    errorMsg.style.display = 'block';
+    return null;
+  }
+
+  errorMsg.style.display = 'none';
+  // Muestra el saludo personalizado en pantalla
+  document.getElementById('saludo').textContent = `Simulación generada para: ${nombre}`;
+  return nombre;
+}
 
 function procesarSimulacion() {
-    const montoInput = parseFloat(document.getElementById('monto').value);
-    const tasaAnualInput = parseFloat(document.getElementById('tasa').value) / 100;
-    const plazoMeses = parseInt(document.getElementById('plazo').value, 10);
-    const IVA_VALOR = 0.16;
+  // Se registra el nombre antes de calcular ,si no es válido se detiene el proceso
+  const nombreSolicitante = registrarNombre();
+  if (nombreSolicitante === null) {
+    return;
+  }
 
-    const errorMsg = document.getElementById('error-msg');
-    const resultados = document.getElementById('resultados');
+  const montoInput = parseFloat(document.getElementById('monto').value);
+  const tasaAnualInput = parseFloat(document.getElementById('tasa').value) / 100;
+  const plazoMeses = parseInt(document.getElementById('plazo').value);
+  const IVA_VALOR = 0.16;
+  const errorMsg = document.getElementById('error-msg');
 
-    // Validación de entradas
-    if (
-        isNaN(montoInput) || montoInput <= 0 ||
-        isNaN(tasaAnualInput) || tasaAnualInput < 0 ||
-        isNaN(plazoMeses) || plazoMeses <= 0
-    ) {
-        errorMsg.textContent = 'Ingrese parámetros numéricos válidos (montos y tasas positivos) e intente nuevamente.';
-        errorMsg.hidden = false;
-        resultados.hidden = true;
-        return;
-    }
-    errorMsg.hidden = true;
+  if (isNaN(montoInput) || isNaN(tasaAnualInput) || montoInput <= 0) {
+    errorMsg.textContent = "Ingrese parámetros numéricos válidos e intente nuevamente.";
+    errorMsg.style.display = 'block';
+    return;
+  }
+  errorMsg.style.display = 'none';
 
-    const amortizacionCapital = montoInput / plazoMeses;
-    const tasaMensualEquivalente = tasaAnualInput / 12;
+  const amortizacionCapital = montoInput / plazoMeses;
+  const tasaMensualEquivalente = tasaAnualInput / 12;
 
-    let saldoInsoluto = montoInput;
-    const tablaBody = document.querySelector('#tabla-amortizacion tbody');
-    tablaBody.innerHTML = '';
+  let saldoInsoluto = montoInput;
+  const tablaBody = document.querySelector('#tabla-amortizacion tbody');
+  tablaBody.innerHTML = '';
+  let acumuladoPagos = 0;
 
-    let acumuladoPagos = 0;
-    let acumuladoInteres = 0;
-    let acumuladoIVA = 0;
+  for (let periodo = 1; periodo <= plazoMeses; periodo++) {
+    const interesDelPeriodo = saldoInsoluto * tasaMensualEquivalente;
+    const ivaSobreInteres = interesDelPeriodo * IVA_VALOR;
+    const pagoMensualTotal = amortizacionCapital + interesDelPeriodo + ivaSobreInteres;
+    const saldoFinalPeriodo = Math.max(0, saldoInsoluto - amortizacionCapital);
 
-    for (let periodo = 1; periodo <= plazoMeses; periodo++) {
-        const saldoInicial = saldoInsoluto;
-        const interesDelPeriodo = saldoInsoluto * tasaMensualEquivalente;
-        const ivaSobreInteres = interesDelPeriodo * IVA_VALOR;
-        const pagoMensualTotal = amortizacionCapital + interesDelPeriodo + ivaSobreInteres;
+    acumuladoPagos += pagoMensualTotal;
 
-        saldoInsoluto -= amortizacionCapital;
-        // Evita residuos negativos por redondeo en el último periodo
-        if (periodo === plazoMeses || saldoInsoluto < 0.005) {
-            saldoInsoluto = 0;
-        }
+    // Crear fila para la tabla de amortización
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+      <td>${periodo}</td>
+      <td>$${saldoInsoluto.toFixed(2)}</td>
+      <td>$${amortizacionCapital.toFixed(2)}</td>
+      <td>$${interesDelPeriodo.toFixed(2)}</td>
+      <td>$${ivaSobreInteres.toFixed(2)}</td>
+      <td>$${pagoMensualTotal.toFixed(2)}</td>
+      <td>$${saldoFinalPeriodo.toFixed(2)}</td>
+    `;
+    tablaBody.appendChild(fila);
 
-        acumuladoPagos += pagoMensualTotal;
-        acumuladoInteres += interesDelPeriodo;
-        acumuladoIVA += ivaSobreInteres;
-
-        const fila = document.createElement('tr');
-        fila.innerHTML = `
-            <td>${periodo}</td>
-            <td>${formatoMoneda.format(saldoInicial)}</td>
-            <td>${formatoMoneda.format(amortizacionCapital)}</td>
-            <td>${formatoMoneda.format(interesDelPeriodo)}</td>
-            <td>${formatoMoneda.format(ivaSobreInteres)}</td>
-            <td>${formatoMoneda.format(pagoMensualTotal)}</td>
-            <td>${formatoMoneda.format(saldoInsoluto)}</td>
-        `;
-        tablaBody.appendChild(fila);
-    }
-
-    // Resumen
-    document.getElementById('pago-promedio').textContent = formatoMoneda.format(acumuladoPagos / plazoMeses);
-    document.getElementById('total-interes').textContent = formatoMoneda.format(acumuladoInteres);
-    document.getElementById('total-iva').textContent = formatoMoneda.format(acumuladoIVA);
-    document.getElementById('total-pagar').textContent = formatoMoneda.format(acumuladoPagos);
-
-    resultados.hidden = false;
+    // Actualizar saldo insoluto para la siguiente iteración
+    saldoInsoluto = saldoFinalPeriodo;
+  }
 }

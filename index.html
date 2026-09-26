@@ -1,83 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Crédito Personal</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Crédito estudiantil UTVT. Garcia Adrian Gael Joshua.</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Simulador de Crédito Personal</h1>
-        <p id="saludo"></p>
+  <div class="container">
+    <h1>UTVT.</h1>
+    <h1>Sistema de Crédito Estudiantil.</h1>
+    <form id="credit-form">
+      <!--campo para registrar el nombre del Estudiante-->
+      <label for="nombre">Nombre del Solicitante:</label>
+      <input type="text" id="nombre" placeholder="Ej. Juan Pérez" required>
 
-        <form id="credit-form">
-            <div class="form-group">
-                <label for="monto">Monto del Crédito Solicitado ($):</label>
-                <input type="number" id="monto" value="150000" min="1" step="100" required>
-            </div>
+      <label for="monto">Monto del Crédito Solicitado ($):</label>
+      <input type="number" id="monto" value="150000" required>
+      
+      <label for="tasa">Tasa de Interés Anual Ordinaria (%):</label>
+      <input type="number" id="tasa" value="34" step="0.1" required>
+      
+      <label for="plazo">Plazo del Financiamiento (Meses):</label>
+      <select id="plazo">
+        <option value="12">12 meses</option>
+        <option value="24">24 meses</option>
+        <option value="36">36 meses</option>
+        <option value="48" selected>48 meses</option>
+      </select>
 
-            <div class="form-group">
-                <label for="tasa">Tasa de Interés Anual Ordinaria (%):</label>
-                <input type="number" id="tasa" value="34" step="0.1" min="0" required>
-            </div>
+      <button type="button" id="btn-calcular">Calcular Amortización</button>
+    </form>
+  
+    <!--saludo con el nombre del solicitante-->
+    <p id="saludo"></p>
 
-            <div class="form-group">
-                <label for="plazo">Plazo del Financiamiento (Meses):</label>
-                <select id="plazo">
-                    <option value="12">12 meses</option>
-                    <option value="24">24 meses</option>
-                    <option value="36">36 meses</option>
-                    <option value="48" selected>48 meses</option>
-                </select>
-            </div>
+    <table id="tabla-amortizacion">
+    <thead>
+        <tr>
+          <th>Mes</th>
+          <th>Saldo Inicial</th>
+          <th>Capital</th>
+          <th>Interés</th>
+          <th>IVA (16%)</th>
+          <th>Pago Total</th>
+          <th>Saldo Final</th>
+        </tr>
+      </thead>
+      <tbody>
 
-            <button type="button" id="btn-calcular" class="btn-primary">Calcular</button>
-        </form>
+      </tbody>
+    </table>
+  </div>
 
-        <section id="resultados" class="resultados" hidden>
-            <h2>Resumen</h2>
-            <div class="summary-grid">
-                <div class="summary-card">
-                    <span class="summary-label">Pago Mensual Promedio</span>
-                    <span class="summary-value" id="pago-promedio">$0.00</span>
-                </div>
-                <div class="summary-card">
-                    <span class="summary-label">Total de Intereses</span>
-                    <span class="summary-value" id="total-interes">$0.00</span>
-                </div>
-                <div class="summary-card">
-                    <span class="summary-label">Total de IVA</span>
-                    <span class="summary-value" id="total-iva">$0.00</span>
-                </div>
-                <div class="summary-card summary-card--highlight">
-                    <span class="summary-label">Total a Pagar</span>
-                    <span class="summary-value" id="total-pagar">$0.00</span>
-                </div>
-            </div>
-
-            <h2>Tabla de Amortización</h2>
-            <div class="table-wrapper">
-                <table id="tabla-amortizacion">
-                    <thead>
-                        <tr>
-                            <th>Periodo</th>
-                            <th>Saldo Inicial</th>
-                            <th>Amortización</th>
-                            <th>Interés</th>
-                            <th>IVA</th>
-                            <th>Pago Total</th>
-                            <th>Saldo Final</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </section>
-
-        <p id="error-msg" class="error-msg" hidden></p>
-    </div>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
