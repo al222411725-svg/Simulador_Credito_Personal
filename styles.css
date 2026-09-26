@@ -1,7 +1,7 @@
 :root {
-    --color-bg: #eef2f7;
-    --color-primary: #2b3a67;
-    --color-accent: #3a7bd5;
+    --color-bg: #6eddb8;
+    --color-primary: #e67e22;
+    --color-accent: #8eaad1;
     --color-accent-dark: #2c5fa8;
     --color-card: #ffffff;
     --color-text: #2c3345;
@@ -36,6 +36,13 @@ h1 {
     color: var(--color-primary);
     text-align: center;
     margin-bottom: 25px;
+}
+
+#saludo {
+    text-align: center;
+    color: var(--color-accent-dark);
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 
 h2 {

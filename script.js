@@ -1,3 +1,12 @@
+// Pedimos el nombre de usuario al cargar la página
+let nombreUsuario = prompt("Por favor, ingresa tu nombre de usuario:");
+
+if (nombreUsuario === null || nombreUsuario.trim() === "") {
+    nombreUsuario = "Invitado";
+}
+
+document.getElementById('saludo').textContent = "Bienvenido, " + nombreUsuario;
+
 document.getElementById('btn-calcular').addEventListener('click', procesarSimulacion);
 
 const formatoMoneda = new Intl.NumberFormat('es-MX', {
