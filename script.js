@@ -1,6 +1,6 @@
 document.getElementById('btn-calcular').addEventListener('click', procesarSimulacion);
 
-// función que registra y valida el nombre del solicitante
+// Funcion para registrar y validar el nombre
 function registrarNombre() {
   const nombre = document.getElementById('nombre').value.trim();
   const errorMsg = document.getElementById('error-msg');
@@ -18,7 +18,7 @@ function registrarNombre() {
 }
 
 function procesarSimulacion() {
-  // Se registra el nombre antes de calcular ,si no es válido se detiene el proceso
+  //Registra el nombre antes de calcular; si no es válido, se detiene el proceso
   const nombreSolicitante = registrarNombre();
   if (nombreSolicitante === null) {
     return;
@@ -66,7 +66,7 @@ function procesarSimulacion() {
     `;
     tablaBody.appendChild(fila);
 
-    // Actualizar saldo insoluto para la siguiente iteración
+    // Actualizar saldo para la siguiente iteración
     saldoInsoluto = saldoFinalPeriodo;
   }
 }

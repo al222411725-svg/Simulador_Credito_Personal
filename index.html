@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Crédito estudiantil UTVT. Garcia Adrian Gael Joshua.</title>
+  <title>Sistema de Crédito UTVT -Garcia Adrian Gael Joshua.</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>UTVT.</h1>
-    <h1>Sistema de Crédito Estudiantil.</h1>
+    <h1>Sistema de Crédito UTVT</h1>
     <form id="credit-form">
-      <!--campo para registrar el nombre del Estudiante-->
+      <!-- campo que registrar el nombre del solicitante -->
       <label for="nombre">Nombre del Solicitante:</label>
-      <input type="text" id="nombre" placeholder="Ej. Juan Pérez" required>
+      <input type="text" id="nombre" placeholder="Ej. Juanito el huerfanito" required>
 
       <label for="monto">Monto del Crédito Solicitado ($):</label>
-      <input type="number" id="monto" value="150000" required>
+      <input type="number" id="monto" value="500,000" required>
       
       <label for="tasa">Tasa de Interés Anual Ordinaria (%):</label>
       <input type="number" id="tasa" value="34" step="0.1" required>
@@ -31,12 +30,12 @@
 
       <button type="button" id="btn-calcular">Calcular Amortización</button>
     </form>
-  
-    <!--saludo con el nombre del solicitante-->
+
+    <!-- saludo con el nombre del solicitante -->
     <p id="saludo"></p>
 
     <table id="tabla-amortizacion">
-    <thead>
+      <thead>
         <tr>
           <th>Mes</th>
           <th>Saldo Inicial</th>
@@ -48,7 +47,6 @@
         </tr>
       </thead>
       <tbody>
-
       </tbody>
     </table>
   </div>
